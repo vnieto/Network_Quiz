@@ -4,6 +4,7 @@
  
 from Tkinter import *
 from tkMessageBox import *
+import random
  
 import socket, threading, signal
  
@@ -165,7 +166,7 @@ fenetreJeu.title('Questionnaire')
  
 #On créé les différentes zones de la fenêtre :
 ## cadreServeur : paramètres du serveur
-cadreServeur = Frame(fenetreJeu,borderwidth=2,relief=GROOVE, background = "#A4F9F2")
+cadreServeur = Frame(fenetreJeu,borderwidth=2,relief=RAISED, background = "#A4F9F2")
  
 #Définition de l'adresse de l'hote
 Label(cadreServeur, text = "Hôte :").grid(row=0,column=0,padx=5,pady=5,sticky=W)
@@ -189,20 +190,20 @@ cadreServeur.grid(row=0,column=0,padx=5,pady=5,sticky=W+E)
  
  
 ## cadreReception : récéption et affichage des messages (pseudo, questions, réponses, resultats ...) (zone de texte et scrollbar)
-cadreReception = Frame(fenetreJeu,borderwidth=2,relief=GROOVE, background = "#A9F5BC")
+cadreReception = Frame(fenetreJeu,borderwidth=2,relief=RAISED, background = "#A9F5BC")
  
 # zone de texte (ici, zone d'affichage car elle est maintenue en lecture seule) :
-espaceRecep = Text(cadreReception,width =80, height =30,state=DISABLED)
+espaceRecep = Text(cadreReception,width =80, height =15,state=DISABLED)
 espaceRecep.grid(row=0,column=0,padx=5,pady=5)
 #scrollbar :
 scroll = Scrollbar(cadreReception, command = espaceRecep.yview, background = "#2EFE2E")
 espaceRecep.configure(yscrollcommand = scroll.set)
 scroll.grid(row=0,column=1,padx=5,pady=5,sticky=E+S+N)
  
-cadreReception.grid(row=1,column=0,padx=5,pady=5)
+cadreReception.grid(row=0,column=2,padx=5,pady=5)
  
 ## cadreEnvoi : envoi de messages au serveur (zone d'entrée de texte et bouton d'envoi)
-cadreEnvoi = Frame(fenetreJeu,borderwidth=2,relief=GROOVE,background = "#E1F5A9")
+cadreEnvoi = Frame(fenetreJeu,borderwidth=2,relief=RAISED,background = "#E1F5A9")
  
 #Checkbox pour les réponse
 v = StringVar()
@@ -221,7 +222,8 @@ boutonRepondre.grid(row=0, column=8,padx=15)
  
 #on stocke le message tapé dans la variable MESSAGE :
 MESSAGE = StringVar()
-Entry(cadreEnvoi, textvariable= MESSAGE).grid(row=1,column=0,padx=5,pady=5)
+MESSAGE.set("Ton nom ici, stp")
+Entry(cadreEnvoi, textvariable= MESSAGE).grid(row=0,column=0,padx=5,pady=5)
  
 #bouton d'envoi du message
 boutonEnvoyer = Button(cadreEnvoi, text ='Envoyer', command = envoyer, activebackground="#088A29", activeforeground = "#FBFF03",disabledforeground ="#6E6E6E", background = "#FFBF00", state=DISABLED)

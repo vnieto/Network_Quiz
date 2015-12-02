@@ -14,15 +14,15 @@
 # fonctionne aussi avec un simple client telnet
 # telnet localhost 50026
 
-import socket, sys, threading, time
+import socket, sys, threading, time,random
 
 # variables globales
 
 # adresse IP et port utilisés par le serveur
 HOST = ""
-PORT = 50026
+PORT = 8000
 
-NOMBREJOUEUR = 1
+NOMBREJOUEUR = 2
 dureemax = 120 # durée max question ; en secondes
 pause = 3 # pause entre deux questions  ; en secondes
 
@@ -32,37 +32,7 @@ dict_reponses = {}  # dictionnaire des réponses des clients
 dict_scores = {} # dictionnaire des scores de la dernière question
 dict_scores_total = {}
 
-# liste des questions
-list_question = []
-sujet = """
-Quel système d'exploitation est sous licence libre ?
-    1) Windows
-    2) MacOS
-    3) Linux
-    0) Je ne sais pas"""
 
-bonnereponse = 3
-list_question.append((sujet,bonnereponse))
-
-sujet = """
-Le Web et Internet...
-    1) C'est la même chose !
-    2) Le Web fait parti d'Internet
-    3) Internet fait parti du Web
-    0) Je ne sais pas"""
-
-bonnereponse = 2
-list_question.append((sujet,bonnereponse))
-
-sujet = """
-Parmi ces langages informatiques, lequel n'est pas un langage de programmation ?
-    1) langage HTML
-    2) langage C
-    3) langage Python
-    0) Je ne sais pas"""
-
-bonnereponse = 1
-list_question.append((sujet,bonnereponse))
 
 #########################################################################################################################
 #REMPLISSAGE DU TABLEAU DES QUESTIONS/REPONSES                                      #
@@ -96,22 +66,23 @@ class ThreadClient(threading.Thread):
         
         print("Connexion du client", self.connexion.getpeername(),self.nom ,self.connexion)
         
-        message = "Vous êtes connecté au serveur.\n"
+        message = "Ta-da QCM de merde va commencer.\n"
         self.connexion.send(message)
         
         
     def run(self):
         
         # Choix du pseudo    
-        
-        self.connexion.send(b"Entrer un pseudo :\n")
+        nom_client_possible=["Hubert","Sandrine","Une gaufre","rosa","vincent","un chient","a dog","un canard","sam"]
+        nom_init=random.choice(nom_client_possible)
+        self.connexion.send(b"Tu n'est pas " +str(nom_init) +"?, sinon t'es qui \n")
         # attente réponse client
         pseudo = self.connexion.recv(4096)
         pseudo = pseudo.decode(encoding='UTF-8')
         
         dict_pseudos[self.nom] = pseudo
         
-        print("Pseudo du client", self.connexion.getpeername(),">", pseudo)
+        print("Donc tu es", self.connexion.getpeername(),">", pseudo)
         
         message = b"Attente des autres clients...\n"
         self.connexion.send(message)
