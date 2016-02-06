@@ -22,7 +22,7 @@ import socket, sys, threading, time,random
 HOST = ""
 PORT = 8000
 
-NOMBREJOUEUR = 2
+NOMBREJOUEUR = 1
 dureemax = 120 # durée max question ; en secondes
 pause = 3 # pause entre deux questions  ; en secondes
 
@@ -40,12 +40,14 @@ dict_scores_total = {}
  
 questions = open("questions2.txt", "r")
 lines = questions.read().split(',\n\n')
+print len(lines)
 questions.close()
  
 TAB_QUESTIONS=[]
 for i in range(0,len(lines)-1):
     if (i % 2) == 0:
         q= lines[i],lines[i+1]
+	print q
         TAB_QUESTIONS.append(q)
 
 ##########################################################################################################################
@@ -107,6 +109,9 @@ class ThreadClient(threading.Thread):
 
         print("\nFin du thread",self.nom)
         self.connexion.close()
+
+
+###################################################################################
 
 def MessagePourTous(message):
     """ message du serveur vers tous les clients"""
@@ -180,7 +185,7 @@ Réponse > """
     for client in dict_reponses:
         try:
             reponse = int(dict_reponses[client][0])
-            if reponse == bonnereponse:
+            if reponse == int(bonnereponse):
                 # bonne réponse 2 pts
                 dict_scores[client] = 2
                 
@@ -191,7 +196,7 @@ Réponse > """
                     if dict_reponses[client][1] < dict_reponses[clientbonus][1]:
                         clientbonus = client
                 
-            elif reponse != 0:
+            elif reponse != int(bonnereponse):
                 # mauvaise réponse -1 pt
                 dict_scores[client] = -1
                 
