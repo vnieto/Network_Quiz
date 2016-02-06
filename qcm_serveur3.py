@@ -22,13 +22,8 @@ import socket, sys, threading, time,random
 HOST = ""
 PORT = 8000
 
-<<<<<<< HEAD
 NOMBREJOUEUR = 1
 dureemax = 120 # durée max question ; en secondes
-=======
-NOMBREJOUEUR = 3
-dureemax = 120 # duree max question ; en secondes
->>>>>>> cce6bb02625e9b8ca3cb117c768fee26f6601cad
 pause = 3 # pause entre deux questions  ; en secondes
 
 dict_clients = {}  # dictionnaire des connexions clients
@@ -45,14 +40,13 @@ dict_scores_total = {}
  
 questions = open("questions2.txt", "r")
 lines = questions.read().split(',\n\n')
-print len(lines)
+
 questions.close()
  
 TAB_QUESTIONS=[]
 for i in range(0,len(lines)-1):
     if (i % 2) == 0:
         q= lines[i],lines[i+1]
-	print q
         TAB_QUESTIONS.append(q)
 
 ##########################################################################################################################
@@ -190,13 +184,10 @@ Reponse > """
     for client in dict_reponses:
         try:
             reponse = int(dict_reponses[client][0])
-<<<<<<< HEAD
+
             if reponse == int(bonnereponse):
-                # bonne réponse 2 pts
-=======
-            if reponse == bonnereponse:
                 # bonne reponse 2 pts
->>>>>>> cce6bb02625e9b8ca3cb117c768fee26f6601cad
+
                 dict_scores[client] = 2
                 
                 if clientbonus == "":
@@ -206,13 +197,9 @@ Reponse > """
                     if dict_reponses[client][1] < dict_reponses[clientbonus][1]:
                         clientbonus = client
                 
-<<<<<<< HEAD
-            elif reponse != int(bonnereponse):
-                # mauvaise réponse -1 pt
-=======
-            elif reponse != 0:
+
+            elif reponse != int(bonnereponse) and reponse != 0:
                 # mauvaise reponse -1 pt
->>>>>>> cce6bb02625e9b8ca3cb117c768fee26f6601cad
                 dict_scores[client] = -1
                 
             else:
