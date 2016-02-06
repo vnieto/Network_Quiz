@@ -116,9 +116,9 @@ def ConnexionServeur():
                     try:
                         # On stocke la socket pour pouvoir la reutiliser :
                         newSock[0]=sock
-                        # On enregistre le message reçu par la socket :
+                        # On enregistre le message recu par la socket :
                         messageRecu = sock.recv(4096)
-                        # On affiche le message reçu dans l'espace de reception, on descend la partie de l'espace de reception affichee, et on le repasse en lecteure seule : 
+                        # On affiche le message recu dans l'espace de reception, on descend la partie de l'espace de reception affichee, et on le repasse en lecteure seule : 
                         espaceRecep.config(state=NORMAL)
                         espaceRecep.insert(END,messageRecu)
                         espaceRecep.yview_scroll(1,"pages")
@@ -152,7 +152,7 @@ def ConnexionServeur():
       
  
 ################################################################
-#               DÉBUT DU PROGRAMME
+#               DEBUT DU PROGRAMME
 ################################################################
  
 #La connexion n'est pas encore etablie :
