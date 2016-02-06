@@ -80,6 +80,7 @@ def repondre():
     if CONNEXION:
         try:
             message = v.get()
+	    
             espaceRecep.config(state=NORMAL)
             espaceRecep.insert(END,message+"\n")
              
