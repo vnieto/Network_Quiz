@@ -1,40 +1,39 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
- 
- 
-from Tkinter import *
+
+
+import Tkinter as tk
 from tkMessageBox import *
 import random
- 
 import socket, threading, signal
- 
-## Gestion du Ctrl-C
+
+#################### cA MARCHE??? ###########################""
+
 def signal_handler(signal, frame):
     print 'Vous avez appuye sur Ctrl+C!'
     global CONNEXION 
     CONNEXION = False
-    fenetreJeu.destroy
+    fen2.master.destroy()
  
- 
-## Methode d'envoi des reponses et d'affichage dans la fenetre de jeu 
-#appelee par le bouton d'envoi de messages  
+
+
 class ThreadReception(threading.Thread):
-    """objet thread gerant la reception des messages"""
+
     def __init__(self, conn):
         threading.Thread.__init__(self)
         ref_socket[0] = conn
-        self.connexion = conn  # ref. du socket de connexion
+        self.connexion = conn  # réf. du socket de connexion
               
     def run(self):
         while True:
             try:
-                # en attente de reception
+                # en attente de réception
                 message_recu = self.connexion.recv(4096)
                 message_recu = message_recu.decode(encoding='UTF-8')
                 
                 ZoneReception.config(state=NORMAL)
                 ZoneReception.insert(END,message_recu)
-                # defilement vers le bas
+                # défilement vers le bas
                 ZoneReception.yview_scroll(1,"pages")
                 # lecture seule
                 ZoneReception.config(state=DISABLED)
@@ -46,85 +45,227 @@ class ThreadReception(threading.Thread):
                     
             except socket.error:
                 pass
-def envoyer():
-    if CONNEXION:
-        try:
-            #on recupere le message (reponse ou pseudo) entre dans le cadre d'envoi :
-            message = MESSAGE.get()
-            #on vide le cadre d'envoi :
-            MESSAGE.set("")
-             
-            #On affiche le message dans l'espace de reception (cadre blanc) :
-            espaceRecep.config(state=NORMAL)
-            espaceRecep.insert(END,message+"\n")
-             
-            # On remet l'espace de reception en lecture seule (= le joueur ne peut pas rentrer directementdui texte a cet endroit) :
-            espaceRecep.config(state=DISABLED)
-             
-            # On remet le bouton d'envoi de messages en etat inutilisable
-            boutonEnvoyer.configure(state = DISABLED)
-             
-            #activate les Radiobuttons
-            C1.configure(state=NORMAL)
-            C2.configure(state=NORMAL)
-            C3.configure(state=NORMAL)
-            C4.configure(state=NORMAL)
-            boutonRepondre.configure(state=NORMAL)
+
+class fen1:
+    def __init__(self,master):
+        self.master=master
+
+        self.master.title('Information')
+         
+        #On créé les différentes zones de la fenêtre :
+        ## cadreServeur : paramètres du serveur
+        self.cadreServeur = tk.Frame(self.master,borderwidth=2,relief=tk.GROOVE, background = "#A4F9F2")
+        self.cadreServeur.pack(side=tk.LEFT,padx=60,pady=60) 
+        self.HOST = tk.StringVar()
+        self.HOST.set('127.0.0.1') 
+        tk.Entry(self.cadreServeur, textvariable= self.HOST).grid(row=0,column=1,padx=5,pady=5)
+        self.PORT = tk.IntVar()
+        #valeur par défaut : 8000
+        self.PORT.set(8000)
+        tk.Entry(self.cadreServeur, textvariable= self.PORT).grid(row=1,column=1,padx=5,pady=5)
+
+
+        #Définition de l'adresse de l'hote
+        tk.Label(self.cadreServeur, text = "Hôte :").grid(row=0,column=0,padx=5,pady=5,sticky=tk.W)
+
+         
+        #Définition du port utilisé
+        tk.Label(self.cadreServeur, text = "Port :").grid(row=1,column=0,padx=5,pady=5,sticky=tk.W)
+
+
+        self.boutonConnexion = tk.Button(self.cadreServeur, text ='Connexion au serveur',activebackground="#088A29", activeforeground = "#2EFEF7", background = "#2E64FE", disabledforeground ="#6E6E6E", command=self.new_window)
+        self.boutonConnexion.grid(row=0,column=2,rowspan=2,padx=5,pady=5)
  
-            # On envoi le message  
-            newSock[0].send(message)
-        except socket.error:
-            showerror('Erreur',"L'envoi du message a rencontre un probleme : %s"%e)
-             
-def repondre():
-    if CONNEXION:
-        try:
-            message = v.get()
-	    
-            espaceRecep.config(state=NORMAL)
-            espaceRecep.insert(END,message+"\n")
-             
-            # On remet l'espace de reception en lecture seule (= le joueur ne peut pas rentrer directementdui texte a cet endroit) :
-            espaceRecep.config(state=DISABLED)
-             
-            # On envoye la reponse
-            newSock[0].send(message)
-             
-            # deselectionner les Radiobutton
-            C1.deselect()
-            C2.deselect()
-            C3.deselect()
-            C4.deselect()
+    def new_window(self):
+        
+        self.newWindow = tk.Toplevel(self.master)
+        temp = fen2(self.newWindow)
+        conn(self,temp)
+        self.app=temp
+        self.boutonConnexion.config(state=tk.DISABLED)
+
+  
+
+class fen2:
+    def __init__(self,master):
+        self.master=master
+        self.master.title('Quiz')
+
+        ##########################################################################  
+        #-----------------------------PREMIER CADRE------------------------------#
+        ##########################################################################  
+
+
+        self.cadreEnvoi = tk.Frame(self.master,borderwidth=1,relief=tk.RAISED,background = "#E1F5A9")
+ 
+        self.MESSAGE = tk.StringVar()
+        self.MESSAGE.set("Ton nom ici, stp")
+        tk.Entry(self.cadreEnvoi, textvariable= self.MESSAGE).grid(row=0,column=0,padx=5,pady=5)
+
+
+
+        self.boutonEnvoyer = tk.Button(self.cadreEnvoi, text ='Envoyer', command = self.envoyer, activebackground="#088A29", activeforeground = "#FBFF03",disabledforeground ="#6E6E6E", background = "#FFBF00", state=tk.NORMAL)
+        self.boutonEnvoyer.grid(row=0,column=1,padx=5,pady=5,)
+         
+        self.cadreEnvoi.grid(row=0,column=0,padx=5,pady=5, columnspan=2)
+
+
+        ##########################################################################  
+        #----------------------------DEUXIEME CADRE------------------------------#
+        ##########################################################################  
+
+        self.cadrebouttons=tk.Frame(self.master,  borderwidth=2, relief=tk.RAISED, background="#E1F5A9",width =60, height =15)
+
+        
+        self.C1 = tk.Button(self.cadrebouttons, width =25, height =5, text="1", command= lambda: self.repondre(self.C1.cget('text')), activebackground="#088A29", activeforeground = "#FBFF03",disabledforeground ="#6E6E6E",background="#FE2E64", state=tk.DISABLED)
+        self.C1.grid(row=0, column=0)
+        self.C2 = tk.Button(self.cadrebouttons, width =25, height =5,text = "2", command= lambda: self.repondre(self.C2.cget('text')), activebackground="#088A29", activeforeground = "#FBFF03",disabledforeground ="#6E6E6E",background = "#FE2E64", state=tk.DISABLED)
+        self.C2.grid(row=0, column=1)
+        self.C3 = tk.Button(self.cadrebouttons, width =25, height =5,text = "3", command= lambda: self.repondre(self.C3.cget('text')), activebackground="#088A29", activeforeground = "#FBFF03",disabledforeground ="#6E6E6E",background = "#FE2E64", state=tk.DISABLED)
+        self.C3.grid(row=1, column=0)
+        self.C4 = tk.Button(self.cadrebouttons, width =25, height =5,text = "0", command= lambda: self.repondre(self.C4.cget('text')),  activebackground="#088A29", activeforeground = "#FBFF03",disabledforeground ="#6E6E6E",background = "#FE2E64", state=tk.DISABLED)
+        self.C4.grid(row=1, column=1)
+
+
+        self.cadrebouttons.grid(row=3, column=0,rowspan=2, columnspan=2)
+
+        ##########################################################################  
+        #---------------------------TROISIEME CADRE------------------------------#
+        ##########################################################################  
+
+
+
+
+        self.cadreReception = tk.Frame(self.master,borderwidth=2,relief=tk.RAISED, background = "#A9F5BC")
+        self.espaceRecep = tk.Text(self.cadreReception,width =60, height =15,state=tk.DISABLED)
+        self.espaceRecep.grid(row=0,column=0,padx=5,pady=5)
+        self.scroll = tk.Scrollbar(self.cadreReception, command = self.espaceRecep.yview, background = "#2EFE2E")
+        self.espaceRecep.configure(yscrollcommand = self.scroll.set)
+        self.scroll.grid(row=0,column=1,padx=5,pady=5,sticky=tk.E+tk.S+tk.N)
+        self.cadreReception.grid(row=1,column=0,padx=5,pady=5,rowspan=2,columnspan=2)
+
+        ##########################################################################  
+        #---------------------------QUATRIEME CADRE------------------------------#
+        ##########################################################################  
+
+        #affichage des clients !!
+
+
+
+        self.cadreClients = tk.Frame(self.master,borderwidth=2,relief=tk.RAISED, background = "#A9F5BC")
+        self.liste = tk.Text(self.cadreClients,width =40, height =35,state=tk.DISABLED)
+        self.liste.grid(row=0,column=0,padx=5,pady=5)
+        self.scroll2 = tk.Scrollbar(self.cadreClients, command = self.liste.yview, background = "#2EFE2E")
+        self.liste.configure(yscrollcommand = self.scroll2.set)
+        self.scroll2.grid(row=0,column=1,padx=5,pady=5,sticky=tk.E+tk.S+tk.N)
+        self.cadreClients.grid(row=0,column=3,padx=5,pady=5,rowspan=4)
+
+
+
+        ##########################################################################  
+        #--------------------------- CINQUIEME CADRE-----------------------------#
+        ##########################################################################  
+
+        #chat???? 
+        self.chat = tk.Frame(self.master,borderwidth=2,relief=tk.RAISED, background = "#A9F5BC")
+        self.cc = tk.Text(self.chat,width =40, height =30,state=tk.DISABLED)
+        self.cc.grid(row=0,column=0,padx=5,pady=5)
+        self.scroll3 = tk.Scrollbar(self.chat, command = self.liste.yview, background = "#2EFE2E")
+        self.cc.configure(yscrollcommand = self.scroll3.set)
+        self.scroll3.grid(row=0,column=1,padx=5,pady=5,sticky=tk.E+tk.S+tk.N)
+        self.chat.grid(row=0,column=4,padx=5,pady=5,rowspan=3)
+
+
+        self.ecrire = tk.Frame(self.master,borderwidth=1,relief=tk.RAISED,background = "#E1F5A9")
+ 
+        self.ME = tk.StringVar()
+        self.ME.set("Ecris ici")
+        tk.Entry(self.ecrire, textvariable= self.ME).grid(row=0,column=0,padx=5,pady=5)
+
+
+
+        self.boutEnvoyer = tk.Button(self.ecrire, text ='Envoyer', command = self.envoyer, activebackground="#088A29", activeforeground = "#FBFF03",disabledforeground ="#6E6E6E", background = "#FFBF00", state=tk.NORMAL)
+        self.boutEnvoyer.grid(row=0,column=1,padx=5,pady=5,)
+         
+        self.ecrire.grid(row=3,column=4,padx=5,pady=5)
+
+
+    def envoyer(self):
+        if CONNEXION:
+            try:
+                #on récupère le message (réponse ou pseudo) entré dans le cadre d'envoi :
+                message = self.MESSAGE.get()
+                #on vide le cadre d'envoi :
+                self.MESSAGE.set("")
                  
-        except socket.error:
-            showerror('Erreur',"L'envoi de la reponse a rencontre un probleme : %s"%e)      
- 
-## Methode de connexion au serveur        
-#appelee par le bouton de demande de connexion  
-def ConnexionServeur():
+                #On affiche le message dans l'espace de récéption (cadre blanc) :
+                self.espaceRecep.config(state=tk.NORMAL)
+                self.espaceRecep.insert(tk.END,message+"\n")
+                 
+                # On remet l'espace de récéption en lecture seule (= le joueur ne peut pas rentrer directementdui texte à cet endroit) :
+                self.espaceRecep.config(state=tk.DISABLED)
+                 
+                # On remet le bouton d'envoi de messages en état inutilisable
+                self.boutonEnvoyer.configure(state = tk.DISABLED)
+                 
+                #activate les Radiobuttons
+                self.C1.configure(state=tk.NORMAL)
+                self.C2.configure(state=tk.NORMAL)
+                self.C3.configure(state=tk.NORMAL)
+                self.C4.configure(state=tk.NORMAL)
+                #self.boutonRepondre.configure(state=tk.NORMAL)
+     
+                # On envoi le message  
+                newSock[0].send(message)
+            except socket.error:
+                showerror('Erreur',"L'envoi du message a rencontré un problème : %s"%e)
+
+    def repondre(self,t):
+        if CONNEXION:
+            try:
+                message = t
+                self.espaceRecep.config(state=tk.NORMAL)
+                self.espaceRecep.insert(tk.END,message+"\n")
+                 
+                # On remet l'espace de récéption en lecture seule (= le joueur ne peut pas rentrer directementdui texte à cet endroit) :
+                self.espaceRecep.config(state=tk.DISABLED)
+                 
+                # On envoye la réponse
+                newSock[0].send(message)
+                 
+                # désélectionner les Radiobutton
+                # self.C1.deselect()
+                # self.C2.deselect()
+                # self.C3.deselect()
+                # self.C4.deselect()
+                     
+            except socket.error:
+                showerror('Erreur',"L'envoi de la réponse a rencontré un problème : %s"%e)     
+
+def conn(f1,f2):
     global CONNEXION
     # Mise en place de la connexion si elle n'existe pas encore : : 
     if CONNEXION == False:
         try:
-            #creation d'une socket pour le client :
+            #création d'une socket pour le client :
             sockClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sockClient.connect((HOST.get(), PORT.get()))
-             
-            #On utilise un thread pour gerer la reception des messages du serveur (par exemple les questions)
+            sockClient.connect((f1.HOST.get(), f1.PORT.get()))
+
             def fonction_thread(sock,num):
                 #ce qui est fait dans le thread :
                 while True: 
                     try:
-                        # On stocke la socket pour pouvoir la reutiliser :
+                        # On stocke la socket pour pouvoir la réutiliser :
                         newSock[0]=sock
-                        # On enregistre le message recu par la socket :
+                        # On enregistre le message reçu par la socket :
                         messageRecu = sock.recv(4096)
-                        # On affiche le message recu dans l'espace de reception, on descend la partie de l'espace de reception affichee, et on le repasse en lecteure seule : 
-                        espaceRecep.config(state=NORMAL)
-                        espaceRecep.insert(END,messageRecu)
-                        espaceRecep.yview_scroll(1,"pages")
-                        espaceRecep.config(state=DISABLED)
- 
+                        # On affiche le message reçu dans l'espace de reception, on descend la partie de l'espace de récéption affichée, et on le repasse en lecteure seule : 
+                        f2.espaceRecep.config(state=tk.NORMAL)
+                        f2.espaceRecep.insert(tk.END,messageRecu)
+                        f2.espaceRecep.yview_scroll(1,"pages")
+                        f2.espaceRecep.config(state=tk.DISABLED)
+
+
                         #gestion de la demande de fin du qcm par le serveur :
                         if "FIN" in messageRecu:
                             global CONNEXION
@@ -132,107 +273,45 @@ def ConnexionServeur():
                             sock.shutdown(1)
                      
                     except socket.error,e:
-                        showerror('Erreur','La fonctionnement du thread a rencontre un probleme : %s'%e)
- 
-        
-            #On cree le thread qui utilise la fonction ci-dessus et on le demarre :
+                        showerror('Erreur','La fonctionnement du thread a rencontré un problème : %s'%e)
+
+
+
+
             threadReception = threading.Thread(group=None,target=fonction_thread,name=None,args=(sockClient,1),kwargs={})
- 
+
             threadReception.start()
- 
-            #La connexion est maintenant etablie :
+
+            #La connexion est maintenant établie :
             CONNEXION = True
             #On rend le bouton d'envoi utilisable et le bouton de demande de connexion inutilisable
-            boutonEnvoyer.configure(state = NORMAL)
-            boutonConnexion.configure(state = DISABLED)
-             
+         
         except socket.error, e:
-            showerror('Erreur','La connexion au serveur a rencontre un probleme : %s'%e)
-         
-         
-      
- 
-################################################################
-#               DEBUT DU PROGRAMME
-################################################################
- 
-#La connexion n'est pas encore etablie :
-CONNEXION = False
-#On cree une liste qui va stocker la socket utilisee pour communiquer avec le serveur :
-newSock={} 
- 
-# On cree la fenetre principale :
-fenetreJeu = Tk()
-fenetreJeu.title('Questionnaire')
- 
-#On cree les differentes zones de la fenetre :
-## cadreServeur : parametres du serveur
-cadreServeur = Frame(fenetreJeu,borderwidth=2,relief=RAISED, background = "#A4F9F2")
- 
-#Definition de l'adresse de l'hote
-Label(cadreServeur, text = "Hôte :").grid(row=0,column=0,padx=5,pady=5,sticky=W)
-HOST = StringVar()
-#valeur par defaut : jeu en local
-HOST.set('127.0.0.1') 
-Entry(cadreServeur, textvariable= HOST).grid(row=0,column=1,padx=5,pady=5)
- 
-#Definition du port utilise
-Label(cadreServeur, text = "Port :").grid(row=1,column=0,padx=5,pady=5,sticky=W)
-PORT = IntVar()
-#valeur par defaut : 8000
-PORT.set(8000)
-Entry(cadreServeur, textvariable= PORT).grid(row=1,column=1,padx=5,pady=5)
- 
-#bouton pour la demande de connexion au serveur :
-boutonConnexion = Button(cadreServeur, text ='Connexion au serveur',activebackground="#088A29", activeforeground = "#2EFEF7", background = "#2E64FE", disabledforeground ="#6E6E6E", command=ConnexionServeur)
-boutonConnexion.grid(row=0,column=2,rowspan=2,padx=5,pady=5)
- 
-cadreServeur.grid(row=0,column=0,padx=5,pady=5,sticky=W+E)
- 
- 
-## cadreReception : reception et affichage des messages (pseudo, questions, reponses, resultats ...) (zone de texte et scrollbar)
-cadreReception = Frame(fenetreJeu,borderwidth=2,relief=RAISED, background = "#A9F5BC")
- 
-# zone de texte (ici, zone d'affichage car elle est maintenue en lecture seule) :
-espaceRecep = Text(cadreReception,width =80, height =15,state=DISABLED)
-espaceRecep.grid(row=0,column=0,padx=5,pady=5)
-#scrollbar :
-scroll = Scrollbar(cadreReception, command = espaceRecep.yview, background = "#2EFE2E")
-espaceRecep.configure(yscrollcommand = scroll.set)
-scroll.grid(row=0,column=1,padx=5,pady=5,sticky=E+S+N)
- 
-cadreReception.grid(row=0,column=2,padx=5,pady=5)
- 
-## cadreEnvoi : envoi de messages au serveur (zone d'entree de texte et bouton d'envoi)
-cadreEnvoi = Frame(fenetreJeu,borderwidth=2,relief=RAISED,background = "#E1F5A9")
- 
-#Checkbox pour les reponse
-v = StringVar()
-C1 = Radiobutton(cadreEnvoi, text = "1", variable = v, value="1", background = "#FE2E64", foreground = "#01DF01", state=DISABLED)
-C1.grid(row=0, column=2)
-C2 = Radiobutton(cadreEnvoi, text = "2", variable = v, value="2", background = "#FE2E64", foreground = "#01DF01", state=DISABLED)
-C2.grid(row=0, column=3)
-C3 = Radiobutton(cadreEnvoi, text = "3", variable = v, value="3",background = "#FE2E64", foreground = "#01DF01", state=DISABLED)
-C3.grid(row=0, column=4)
-C4 = Radiobutton(cadreEnvoi, text = "0", variable = v, value="0",background = "#FE2E64", foreground = "#01DF01", state=DISABLED)
-C4.grid(row=0, column=5, columnspan= 3)
-  
-#bouton d'envoi de la reponse
-boutonRepondre = Button(cadreEnvoi, text ='Repondre', command = repondre,state=DISABLED, activebackground="#088A29", activeforeground = "#FBFF03",disabledforeground ="#6E6E6E", background = "#FFBF00")
-boutonRepondre.grid(row=0, column=8,padx=15)
- 
-#on stocke le message tape dans la variable MESSAGE :
-MESSAGE = StringVar()
-MESSAGE.set("Ton nom ici, stp")
-Entry(cadreEnvoi, textvariable= MESSAGE).grid(row=0,column=0,padx=5,pady=5)
- 
-#bouton d'envoi du message
-boutonEnvoyer = Button(cadreEnvoi, text ='Envoyer', command = envoyer, activebackground="#088A29", activeforeground = "#FBFF03",disabledforeground ="#6E6E6E", background = "#FFBF00", state=DISABLED)
-boutonEnvoyer.grid(row=1,column=1,padx=5,pady=5,)
- 
-cadreEnvoi.grid(row=3,column=0,padx=5,pady=5,sticky=W+E)
- 
-#gestion du ctrl-C
-signal.signal(signal.SIGINT, signal_handler)
-#Affichage de la fenetre graphique
-fenetreJeu.mainloop()
+            showerror('Erreur','La connexion au serveur a rencontré un problème : %s'%e)
+            f2.master.destroy()
+            f1.boutonConnexion.config(state=tk.NORMAL)
+
+
+
+
+
+CONNEXION=False
+
+newSock={}
+
+
+
+
+def main(): 
+    signal.signal(signal.SIGINT, signal_handler)
+    root = tk.Tk()
+    app = fen1(root)
+    root.mainloop()
+
+
+
+if __name__ == '__main__':
+    main()
+
+
+#SI PAS DE CONNEXION PAS DE FENETRE
