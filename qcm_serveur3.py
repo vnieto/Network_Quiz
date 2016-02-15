@@ -22,7 +22,7 @@ import socket, sys, threading, time,random
 HOST = ""
 PORT = 8000
 
-NOMBREJOUEUR = 1
+NOMBREJOUEUR = 2
 dureemax = 120 # durée max question ; en secondes
 pause = 3 # pause entre deux questions  ; en secondes
 
@@ -78,8 +78,20 @@ class ThreadClient(threading.Thread):
         nom_init=random.choice(nom_client_possible)
         self.connexion.send(b"Tu n'est pas " +str(nom_init) +"?, sinon t'es qui \n")
         # attente reponse client
-        pseudo = self.connexion.recv(4096)
+
+        # pseudo = self.connexion.recv(4096)
+        # pseudo = pseudo.decode(encoding='UTF-8')
+        pseudo = ""
+        while(pseudo==""):
+            message = self.connexion.recv(4096)
+            if(message[0:3]=="@@@"):
+                # Message Chat
+                MessagePourTous(message[0:3]+"Anonymous: "+message[3:]) # Renvoi pseudo+message
+            else:
+                pseudo = message
         pseudo = pseudo.decode(encoding='UTF-8')
+
+
         
         dict_pseudos[self.nom] = pseudo
         
@@ -94,8 +106,18 @@ class ThreadClient(threading.Thread):
             
             try:
                 # attente reponse client
-                reponse = self.connexion.recv(4096)
+                # reponse = self.connexion.recv(4096)
+                # reponse = reponse.decode(encoding='UTF-8')
+                reponse = ""
+                while(reponse==""):
+                    message = self.connexion.recv(4096)
+                    if(message[0:3]=="@@@"):
+                        # Message Chat
+                        MessagePourTous(message[0:3]+pseudo+": "+message[3:]) # Renvoi pseudo+message
+                    else:
+                        reponse = message
                 reponse = reponse.decode(encoding='UTF-8')
+
             except:
                 # fin du thread
                 break
@@ -116,7 +138,9 @@ def MessagePourTous(message):
     """ message du serveur vers tous les clients"""
     for client in dict_clients:
         dict_clients[client].send(bytes(message))
-        
+
+###################################################################################
+# main        
         
 # Initialisation du serveur
 # Mise en place du socket avec les protocoles IPv4 et TCP

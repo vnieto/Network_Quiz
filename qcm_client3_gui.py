@@ -184,11 +184,40 @@ class fen2:
 
 
 
-        self.boutEnvoyer = tk.Button(self.ecrire, text ='Envoyer', command = self.envoyer, activebackground="#088A29", activeforeground = "#FBFF03",disabledforeground ="#6E6E6E", background = "#FFBF00", state=tk.NORMAL)
+        self.boutEnvoyer = tk.Button(self.ecrire, text ='Envoyer', command = self.envoyer_chat, activebackground="#088A29", activeforeground = "#FBFF03",disabledforeground ="#6E6E6E", background = "#FFBF00", state=tk.NORMAL)
         self.boutEnvoyer.grid(row=0,column=1,padx=5,pady=5,)
          
         self.ecrire.grid(row=3,column=4,padx=5,pady=5)
 
+
+    def envoyer_chat(self):
+        if CONNEXION:
+            try:
+                #on récupère le message entré dans le cadre d'envoi :
+                message = "@@@"+self.ME.get()
+                #on vide le cadre d'envoi :
+                self.ME.set("")
+                 
+                # #On affiche le message dans l'espace de récéption (cadre blanc) :
+                # self.cc.config(state=tk.NORMAL)
+                # self.cc.insert(tk.END,message+"\n")
+                # # On remet l'espace de récéption en lecture seule (= le joueur ne peut pas rentrer directementdui texte à cet endroit) :
+                # self.cc.config(state=tk.DISABLED)
+                 
+                # On remet le bouton d'envoi de messages en état inutilisable
+                # self.boutonEnvoyer.configure(state = tk.DISABLED)
+                 
+                #activate les Radiobuttons
+                # self.C1.configure(state=tk.NORMAL)
+                # self.C2.configure(state=tk.NORMAL)
+                # self.C3.configure(state=tk.NORMAL)
+                # self.C4.configure(state=tk.NORMAL)
+                #self.boutonRepondre.configure(state=tk.NORMAL)
+     
+                # On envoi le message  
+                newSock[0].send(message)
+            except socket.error:
+                showerror('Erreur',"L'envoi du message a rencontré un problème : %s"%e)
 
     def envoyer(self):
         if CONNEXION:
@@ -258,7 +287,20 @@ def conn(f1,f2):
                         # On stocke la socket pour pouvoir la réutiliser :
                         newSock[0]=sock
                         # On enregistre le message reçu par la socket :
-                        messageRecu = sock.recv(4096)
+                        # messageRecu = sock.recv(4096)
+                        messageRecu = ""
+                        while(messageRecu==""):
+                            message = sock.recv(4096)
+                            if(message[0:3]=="@@@"):
+                                # Message Chat
+                                f2.cc.config(state=tk.NORMAL)
+                                f2.cc.insert(tk.END,message[3:]+"\n")
+                                f2.cc.yview_scroll(1,"pages")
+                                f2.cc.config(state=tk.DISABLED)
+                            else:
+                                messageRecu = message
+                        #messageRecu = messageRecu.decode(encoding='UTF-8')                        
+
                         # On affiche le message reçu dans l'espace de reception, on descend la partie de l'espace de récéption affichée, et on le repasse en lecteure seule : 
                         f2.espaceRecep.config(state=tk.NORMAL)
                         f2.espaceRecep.insert(tk.END,messageRecu)
@@ -275,12 +317,32 @@ def conn(f1,f2):
                     except socket.error,e:
                         showerror('Erreur','La fonctionnement du thread a rencontré un problème : %s'%e)
 
+            # def fonction_thread_chat(sock,num):
+            #     #ce qui est fait dans le thread :
+            #     while True: 
+            #         try:
+            #             # On stocke la socket pour pouvoir la réutiliser :
+            #             newSock[1]=sock
+            #             # On enregistre le message reçu par la socket :
+            #             messageRecu_chat = sock.recv(4096)
+            #             # On affiche le message reçu dans l'espace de reception, on descend la partie de l'espace de récéption affichée, et on le repasse en lecteure seule : 
+            #             f2.cc.config(state=tk.NORMAL)
+            #             f2.cc.insert(tk.END,messageRecu_chat)
+            #             f2.cc.yview_scroll(1,"pages")
+            #             f2.cc.config(state=tk.DISABLED)
+                     
+            #         except socket.error,e:
+            #             showerror('Erreur','La fonctionnement du thread a rencontré un problème : %s'%e)
+
 
 
 
             threadReception = threading.Thread(group=None,target=fonction_thread,name=None,args=(sockClient,1),kwargs={})
 
             threadReception.start()
+
+            # threadReception_chat = threading.Thread(group=None,target=fonction_thread_chat,name=None,args=(sockClient,1),kwargs={})
+            # threadReception_chat.start()
 
             #La connexion est maintenant établie :
             CONNEXION = True
