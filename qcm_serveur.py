@@ -72,7 +72,7 @@ class ThreadClient(threading.Thread):
         # Choix du pseudo    
         nom_client_possible=["le président","Einstein","un ordinateur"]
         nom_init=random.choice(nom_client_possible)
-        self.connexion.send(b"Tu n'es pas " +str(nom_init) +", mais tu vas peut-etre gagné quand même \n")
+        self.connexion.send(b"Tu n'es pas " +str(nom_init) +", mais tu vas peut-etre gagner quand même...\n")
         # attente reponse client
 
         # pseudo = self.connexion.recv(4096)
