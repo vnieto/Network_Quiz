@@ -14,15 +14,15 @@
 # fonctionne aussi avec un simple client telnet
 # telnet localhost 50026
 
-import socket, sys, threading, time,random
+import socket, sys, threading, time,random, numpy
 
 # variables globales
 
 # adresse IP et port utilises par le serveur
 HOST = ""
-PORT = 8000
+PORT = int(sys.argv[1])
 
-NOMBREJOUEUR = 2
+NOMBREJOUEUR = int(sys.argv[2])
 dureemax = 120 # durée max question ; en secondes
 pause = 3 # pause entre deux questions  ; en secondes
 
@@ -41,14 +41,23 @@ dict_scores_total = {}
 questions = open("questions2.txt", "r")
 lines = questions.read().split(',\n\n')
 
+
 questions.close()
  
 TAB_QUESTIONS=[]
+questions_tot=[]
 for i in range(0,len(lines)-1):
     if (i % 2) == 0:
         q= lines[i],lines[i+1]
-        TAB_QUESTIONS.append(q)
+        questions_tot.append(q)
+print questions_tot[8]
+indices=numpy.random.choice(len(questions_tot),5,replace=False)
+#print indices
 
+for j in indices:
+    TAB_QUESTIONS.append(questions_tot[j])
+
+#print TAB_QUESTIONS
 ##########################################################################################################################
 class ThreadClient(threading.Thread):
     '''derivation de classe pour gerer la connexion avec un client'''

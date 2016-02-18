@@ -5,7 +5,7 @@
 import Tkinter as tk
 from tkMessageBox import *
 import random
-import socket, threading, signal
+import socket,sys, threading, signal
 
 #################### cA MARCHE??? ###########################""
 
@@ -13,7 +13,7 @@ def signal_handler(signal, frame):
     print 'Vous avez appuye sur Ctrl+C!'
     global CONNEXION 
     CONNEXION = False
-    fen2.master.destroy()
+    sys.exit(0)
  
 
 
@@ -152,13 +152,13 @@ class fen2:
 
 
 
-        self.cadreClients = tk.Frame(self.master,borderwidth=2,relief=tk.RAISED, background = "#A9F5BC")
-        self.liste = tk.Text(self.cadreClients,width =40, height =35,state=tk.DISABLED)
-        self.liste.grid(row=0,column=0,padx=5,pady=5)
-        self.scroll2 = tk.Scrollbar(self.cadreClients, command = self.liste.yview, background = "#2EFE2E")
-        self.liste.configure(yscrollcommand = self.scroll2.set)
-        self.scroll2.grid(row=0,column=1,padx=5,pady=5,sticky=tk.E+tk.S+tk.N)
-        self.cadreClients.grid(row=0,column=3,padx=5,pady=5,rowspan=4)
+        # self.cadreClients = tk.Frame(self.master,borderwidth=2,relief=tk.RAISED, background = "#A9F5BC")
+        # self.liste = tk.Text(self.cadreClients,width =40, height =35,state=tk.DISABLED)
+        # self.liste.grid(row=0,column=0,padx=5,pady=5)
+        # self.scroll2 = tk.Scrollbar(self.cadreClients, command = self.liste.yview, background = "#2EFE2E")
+        # self.liste.configure(yscrollcommand = self.scroll2.set)
+        # self.scroll2.grid(row=0,column=1,padx=5,pady=5,sticky=tk.E+tk.S+tk.N)
+        # self.cadreClients.grid(row=0,column=3,padx=5,pady=5,rowspan=4)
 
 
 
@@ -170,13 +170,13 @@ class fen2:
         self.chat = tk.Frame(self.master,borderwidth=2,relief=tk.RAISED, background = "#A9F5BC")
         self.cc = tk.Text(self.chat,width =40, height =30,state=tk.DISABLED)
         self.cc.grid(row=0,column=0,padx=5,pady=5)
-        self.scroll3 = tk.Scrollbar(self.chat, command = self.liste.yview, background = "#2EFE2E")
+        self.scroll3 = tk.Scrollbar(self.chat, command = self.cc.yview, background = "#2EFE2E")
         self.cc.configure(yscrollcommand = self.scroll3.set)
         self.scroll3.grid(row=0,column=1,padx=5,pady=5,sticky=tk.E+tk.S+tk.N)
-        self.chat.grid(row=0,column=4,padx=5,pady=5,rowspan=3)
+        self.chat.grid(row=0,column=4,padx=5,pady=5,rowspan=4)
 
 
-        self.ecrire = tk.Frame(self.master,borderwidth=1,relief=tk.RAISED,background = "#E1F5A9")
+        self.ecrire = tk.Frame(self.master,height=20,borderwidth=1,relief=tk.RAISED,background = "#E1F5A9")
  
         self.ME = tk.StringVar()
         self.ME.set("Ecris ici")
@@ -187,7 +187,7 @@ class fen2:
         self.boutEnvoyer = tk.Button(self.ecrire, text ='Envoyer', command = self.envoyer_chat, activebackground="#088A29", activeforeground = "#FBFF03",disabledforeground ="#6E6E6E", background = "#FFBF00", state=tk.NORMAL)
         self.boutEnvoyer.grid(row=0,column=1,padx=5,pady=5,)
          
-        self.ecrire.grid(row=3,column=4,padx=5,pady=5)
+        self.ecrire.grid(row=4,column=4,padx=5,pady=5)
 
 
     def envoyer_chat(self):
@@ -367,6 +367,7 @@ newSock={}
 def main(): 
     signal.signal(signal.SIGINT, signal_handler)
     root = tk.Tk()
+    
     app = fen1(root)
     root.mainloop()
 
