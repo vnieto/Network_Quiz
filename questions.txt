@@ -191,3 +191,11 @@
     0) Je ne sais pas,
 
 2,
+
+ : Que qualifie le terme "Orchidoclaste" ?
+    1) Une fleur
+    2) Qui brise les testicules
+    3) Un morceau d'opéra baroque
+    0) Je ne sais pas,
+
+2,
