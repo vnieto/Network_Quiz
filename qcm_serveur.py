@@ -26,7 +26,7 @@ dict_scores_total = {}
 #REMPLISSAGE DU TABLEAU DES QUESTIONS/REPONSES                                      #
 #########################################################################################################################
  
-questions = open("questions2.txt", "r")
+questions = open("questions.txt", "r")
 lines = questions.read().split(',\n\n')
 
 
