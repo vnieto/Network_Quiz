@@ -1,18 +1,6 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
-# python 3
-# (C) Fabrice Sincere
-
-# ubuntu : OK
-# win XP, 7 : OK
-
-# localhost : OK
-# reseau local : OK (firewall a parametrer)
-# Internet : OK (box - routeur NAT a parametrer)
-
-# fonctionne aussi avec un simple client telnet
-# telnet localhost 50026
 
 import socket, sys, threading, time,random, numpy
 
@@ -52,12 +40,12 @@ for i in range(0,len(lines)-1):
         questions_tot.append(q)
 print questions_tot[8]
 indices=numpy.random.choice(len(questions_tot),5,replace=False)
-#print indices
+
 
 for j in indices:
     TAB_QUESTIONS.append(questions_tot[j])
 
-#print TAB_QUESTIONS
+
 ##########################################################################################################################
 class ThreadClient(threading.Thread):
     '''derivation de classe pour gerer la connexion avec un client'''
@@ -69,23 +57,23 @@ class ThreadClient(threading.Thread):
         
         # Memoriser la connexion dans le dictionnaire
         
-        self.nom = self.getName() # identifiant du thread "<Thread-N>"
+        self.nom = self.getName() # identifiant du thread
         dict_clients[self.nom] = self.connexion
         dict_scores[self.nom] = 0
         dict_scores_total[self.nom] = 0
         
         print("Connexion du client", self.connexion.getpeername(),self.nom ,self.connexion)
         
-        message = "Ta-da QCM de merde va commencer.\n"
+        message = "Le QCM va commencer.\n"
         self.connexion.send(message)
         
         
     def run(self):
         
         # Choix du pseudo    
-        nom_client_possible=["Hubert","Sandrine","Une gauffre","Rosa","Vincent","un chien","Linh","un canard","Sam"]
+        nom_client_possible=["le président","Einstein","un ordinateur"]
         nom_init=random.choice(nom_client_possible)
-        self.connexion.send(b"Tu n'est pas " +str(nom_init) +"?, sinon t'es qui \n")
+        self.connexion.send(b"Tu n'es pas " +str(nom_init) +", mais tu vas peut-etre gagné quand même \n")
         # attente reponse client
 
         # pseudo = self.connexion.recv(4096)
