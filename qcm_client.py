@@ -185,8 +185,6 @@ class fen2:
             try:
                 #on récupère le message (réponse ou pseudo) entré dans le cadre d'envoi :
                 message = self.MESSAGE.get()
-                #on vide le cadre d'envoi :
-                self.MESSAGE.set("")
                  
                 #On affiche le message dans l'espace de récéption (cadre blanc) :
                 self.espaceRecep.config(state=tk.NORMAL)
