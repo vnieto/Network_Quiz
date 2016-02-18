@@ -38,7 +38,6 @@ for i in range(0,len(lines)-1):
     if (i % 2) == 0:
         q= lines[i],lines[i+1]
         questions_tot.append(q)
-print questions_tot[8]
 indices=numpy.random.choice(len(questions_tot),5,replace=False)
 
 
