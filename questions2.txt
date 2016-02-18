@@ -32,6 +32,162 @@
 
 2,
 
+ : En quelle année François Mitterrand a-t-il été élu président de la République française ?
+    1) 1974
+    2) 1976
+    3) 1981
+    0) Je ne sais pas,
 
+3,
 
+ : Quand l'armistice de la seconde guerre mondiale a-t-elle été signée ?
+    1) Le 8 Mai 1945
+    2) Le 14 Juillet 1940
+    3) Le 11 Novembre 1945
+    0) Je ne sais pas,
 
+1,
+
+ : Avec quel instrument peut-on ouvrir une porte ?
+    1) Un merle
+    2) Un rossignol
+    3) Un pigeon
+    0) Je ne sais pas,
+
+2,
+
+ : Quel mot désigne l'élevage des oiseaux ?
+    1) L'ostréiculture
+    2) La cuniculture
+    3) L'aviculture
+    0) Je ne sais pas,
+
+3,
+
+ : Quelle est la méthode basée sur la persuasion par la répétition ?
+    1) Coué
+    2) Cauet
+    3) Couderc
+    0) Je ne sais pas,
+
+1,
+
+ : Avant 2003, les pays de Bosnie, Croatie, Slovénie, Macédoine, Monténégro et Serbie étaient regroupés sous le nom d'un Etat. De quel Etat s'agissait-il ?
+    1) Yougoslavie
+    2) Tchécoslovaquie
+    3) Kosovo
+    0) Je ne sais pas,
+
+1,
+
+ : Comment appelle-t-on un mot construit sur la base des lettres d'un autre mot ?
+    1) Un synonyme
+    2) Un lapsus
+    3) Une anagramme
+    0) Je ne sais pas,
+
+3,
+
+ : Comment s'appelle cette maladie infectieuse provoquée par le bacille de Koch ?
+    1) La peste
+    2) La tuberculose
+    3) La poliomyélite
+    0) Je ne sais pas,
+
+2,
+
+ : Quel est l'homme d'état créateur de l'Académie Française ?
+    1) Louis IV
+    2) Henry IV
+    3) Le cardinal de Richelieu
+    0) Je ne sais pas,
+    
+3,
+
+ : Quel autre nom donne-t-on aux globules blancs ?
+    1) Leucocytes
+    2) Plaquettes
+    3) Triglycérides
+    0) Je ne sais pas,
+
+1,
+
+ : Sous le règne de quel roi, Colbert fut-il ministre des finances ?
+    1) Louis XIII
+    2) Louis XIV
+    3) Louis XV
+    0) Je ne sais pas,
+
+2,
+
+ : Où se trouve le siège de l'UNESCO ?
+    1) Londres
+    2) Paris
+    3) New York
+    0) Je ne sais pas,
+
+2,
+
+ : Qui fut la première présidente du Parlement européen 
+    1) Edith CRESSON
+    2) Simone VEIL
+    3) Margaret THATCHER
+    0) Je ne sais pas,
+
+2,
+
+ : Le saturnisme est une maladie due à une intoxication au :
+    1) Plomb
+    2) Fer
+    3) Cuivre
+    0) Je ne sais pas,
+
+1,
+
+ : Quelle ville française n'est pas située sur le Rhône ?
+    1) Grenoble
+    2) Avignon
+    3) Lyon
+    0) Je ne sais pas,
+
+1,
+
+ : A quelle distance approximative correspond un degré de latitude terrestre ?
+    1) 111 km
+    2) 62 km
+    3) 8 km
+    0) Je ne sais pas,
+
+1,
+
+ : Lequel de ces fleuves ne coule pas en Russie ?
+    1) La Volga
+    2) La Vistule
+    3) L'Ob
+    0) Je ne sais pas,
+
+2,
+
+ : Quel département n'est pas frontalier avec l'Italie ?
+    1) Le Vaucluse
+    2) Les Hautes-Alpes
+    3) La Haute-Savoie
+    0) Je ne sais pas,
+
+1,
+
+ : Quelle est la devise de l'Union européenne ?
+    1) L'union fait la force
+    2) Liberté, égalité, fraternité
+    3) Unis dans la diversité
+    0) Je ne sais pas,
+
+3,
+
+ : Que désigne le terme "mandarin" ?
+    1) Un fruit
+    2) Un fonctionnaire de l'empire chinois
+    3) Un instrument de musique
+    0) Je ne sais pas,
+
+2,
